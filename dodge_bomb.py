@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import pygame as pg
+import time
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -25,6 +26,30 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
         tate = False
     return yoko, tate
+
+def game_over(screen: pg.Surface) -> None:
+    black_out = pg.Surface((WIDTH, HEIGHT))
+    black_out.fill((0, 0, 0)) 
+    black_out.set_alpha(150)  
+    
+    font = pg.font.Font(None, 80)
+    txt = font.render("Game Over", True, (255, 255, 255))
+    txt_rct = txt.get_rect(center=(WIDTH//2, HEIGHT//2))
+    
+    kk_img = pg.image.load("fig/8.png") 
+    kk_rct_l = kk_img.get_rect()
+    kk_rct_l.center = (WIDTH//2 - 250, HEIGHT//2)
+    kk_rct_r = kk_img.get_rect()
+    kk_rct_r.center = (WIDTH//2 + 250, HEIGHT//2)
+
+    black_out.blit(txt, txt_rct)
+    black_out.blit(kk_img, kk_rct_l)
+    black_out.blit(kk_img, kk_rct_r)
+    screen.blit(black_out, [0, 0])
+
+    pg.display.update()
+    time.sleep(5)
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -79,6 +104,13 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
+
+        if kk_rct.colliderect(bb_rct):
+            game_over(screen)
+            return
+
+        
 
 
 if __name__ == "__main__":
