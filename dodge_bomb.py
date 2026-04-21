@@ -14,6 +14,31 @@ DELTA = {
     pg.K_RIGHT: (5, 0),
 }
 
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
+    """
+    移動量タプルに対応する方向を向いた画像Surfaceの辞書を返す
+    """
+    img0 = pg.image.load("fig/3.png")
+    # 左向きが基本の場合の反転・回転例
+    img1 = pg.transform.flip(img0, True, False)  # 右向き
+    
+    kk_dict = {
+        (0, 0):   pg.transform.rotozoom(img0, 0, 0.9),    # 静止 演習3の途中
+        (+5, 0):  pg.transform.rotozoom(img1, 0, 0.9),    # 右
+        (+5, -5): pg.transform.rotozoom(img1, 45, 0.9),   # 右上
+        (0, -5):  pg.transform.rotozoom(img1, 90, 0.9),   # 上
+        (-5, -5): pg.transform.rotozoom(img0, -45, 0.9),  # 左上
+        (-5, 0):  pg.transform.rotozoom(img0, 0, 0.9),    # 左
+        (-5, +5): pg.transform.rotozoom(img0, 45, 0.9),   # 左下
+        (0, +5):  pg.transform.rotozoom(img0, -90, 0.9),  # 下
+        (+5, +5): pg.transform.rotozoom(img1, -45, 0.9),  # 右下
+    }
+    return kk_dict
+
+
+
+
+
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数：こうかとんrectか、ばくだんrect
@@ -110,8 +135,7 @@ def main():
         bb_rct.center = original_center
         
         bb_rct.move_ip(avx, avy)
-
-        
+  
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
