@@ -35,10 +35,6 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
     }
     return kk_dict
 
-
-
-
-
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数：こうかとんrectか、ばくだんrect
@@ -168,8 +164,6 @@ def main():
             return
 
         
-
-
 if __name__ == "__main__":
     pg.init()
     main()
