@@ -51,6 +51,19 @@ def game_over(screen: pg.Surface) -> None:
     time.sleep(5)
 
 
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs = []
+    bb_accs = [a for a in range(1, 11)]  
+    
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        bb_img.set_colorkey((0, 0, 0))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_imgs.append(bb_img)
+        
+    return bb_imgs, bb_accs
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -66,6 +79,12 @@ def main():
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = 5, 5
 
+    bb_imgs, bb_accs = init_bb_imgs()
+    idx = 0 
+    bb_img = bb_imgs[idx]
+    bb_rct = bb_img.get_rect()
+    bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -77,6 +96,20 @@ def main():
                 return
                 
         screen.blit(bg_img, [0, 0]) 
+
+
+        idx = min(tmr // 500, 9)     
+        bb_img = bb_imgs[idx]     
+ 
+        avx = vx * bb_accs[idx]       
+        avy = vy * bb_accs[idx]
+        
+
+        original_center = bb_rct.center
+        bb_rct = bb_img.get_rect()
+        bb_rct.center = original_center
+        
+        bb_rct.move_ip(avx, avy)
 
         
 
